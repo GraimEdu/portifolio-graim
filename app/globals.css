@@ -1,0 +1,196 @@
+@import "tailwindcss";
+
+/* ═══════════════════════════════════════════════════════════════
+   Tokens — OKLCH. Tons derivados mexendo apenas em lightness,
+   mantendo chroma e hue, para consistência perceptual.
+   ═══════════════════════════════════════════════════════════════ */
+:root {
+  /* Superfícies — quase neutro com leve viés frio */
+  --surface-sunken: oklch(9% 0.010 240);
+  --surface: oklch(13.5% 0.012 240);
+  --surface-raised: oklch(18% 0.014 240);
+  --surface-overlay: oklch(23% 0.014 240);
+
+  /* Texto — 3 níveis, nunca mais que isso */
+  --on-surface: oklch(96% 0.006 240);
+  --on-surface-dim: oklch(66% 0.014 240);
+  --on-surface-faint: oklch(46% 0.012 240);
+
+  /* Acento único, frio e contido */
+  --accent: oklch(70% 0.13 195);
+  --accent-dim: oklch(58% 0.11 195);
+  --accent-faint: oklch(30% 0.05 195);
+  --accent-wash: oklch(70% 0.13 195 / 0.08);
+
+  /* Linhas */
+  --line: oklch(26% 0.012 240);
+  --line-strong: oklch(34% 0.014 240);
+
+  /* Semânticos — só na seção de incidentes */
+  --danger: oklch(64% 0.17 28);
+  --warning: oklch(78% 0.13 80);
+  --ok: oklch(70% 0.14 155);
+
+  /* Movimento */
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-elastic: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --dur-micro: 150ms;
+  --dur-element: 400ms;
+  --dur-section: 900ms;
+
+  color-scheme: dark;
+}
+
+@theme inline {
+  --color-surface-sunken: var(--surface-sunken);
+  --color-surface: var(--surface);
+  --color-surface-raised: var(--surface-raised);
+  --color-surface-overlay: var(--surface-overlay);
+
+  --color-fg: var(--on-surface);
+  --color-fg-dim: var(--on-surface-dim);
+  --color-fg-faint: var(--on-surface-faint);
+
+  --color-accent: var(--accent);
+  --color-accent-dim: var(--accent-dim);
+  --color-accent-faint: var(--accent-faint);
+
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+
+  --color-danger: var(--danger);
+  --color-warning: var(--warning);
+  --color-ok: var(--ok);
+
+  --font-display: var(--font-sora);
+  --font-sans: var(--font-jakarta);
+  --font-mono: var(--font-jetbrains);
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   Base
+   ═══════════════════════════════════════════════════════════════ */
+* {
+  min-width: 0;
+}
+
+html {
+  background: var(--surface);
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Lenis controla o scroll — CSS smooth entraria em conflito */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+body {
+  background: var(--surface);
+  color: var(--on-surface);
+  font-family: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  overflow-x: hidden;
+}
+
+::selection {
+  background: var(--accent);
+  color: var(--surface-sunken);
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-sora), ui-sans-serif, system-ui, sans-serif;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  line-height: 1.02;
+  text-wrap: balance;
+}
+
+p {
+  text-wrap: pretty;
+}
+
+code, kbd, .mono {
+  font-family: var(--font-jetbrains), ui-monospace, monospace;
+  font-variant-ligatures: none;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   Grão de filme — textura que tira a lisura de "gerado"
+   ═══════════════════════════════════════════════════════════════ */
+.grain {
+  position: fixed;
+  inset: -50%;
+  z-index: 60;
+  pointer-events: none;
+  opacity: 0.032;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)'/%3E%3C/svg%3E");
+  animation: grain-shift 6s steps(6) infinite;
+  will-change: transform;
+}
+
+@keyframes grain-shift {
+  0%   { transform: translate(0, 0); }
+  16%  { transform: translate(-2%, 1%); }
+  33%  { transform: translate(1%, -2%); }
+  50%  { transform: translate(-1%, 2%); }
+  66%  { transform: translate(2%, 1%); }
+  83%  { transform: translate(-2%, -1%); }
+  100% { transform: translate(0, 0); }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   Estados iniciais dos reveals — o JS remove/anima daqui
+   Sem JS (ou com GSAP falhando) o conteúdo aparece normalmente.
+   ═══════════════════════════════════════════════════════════════ */
+[data-reveal] {
+  opacity: 0;
+}
+html:not(.motion-ready) [data-reveal] {
+  opacity: 1;
+}
+
+.hairline {
+  height: 1px;
+  background: var(--line);
+  transform-origin: left;
+}
+
+/* Cordão/crachá: cursor de "pegar" */
+.grabbable {
+  cursor: grab;
+}
+.grabbable:active {
+  cursor: grabbing;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  .grain {
+    animation: none;
+  }
+  [data-reveal] {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
