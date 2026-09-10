@@ -1,9 +1,14 @@
 import Reveal from "@/components/motion/Reveal";
 import { identity } from "@/content/cv";
 
+/**
+ * Contato.
+ *
+ * Sem telefone: o número estava em texto puro num repositório público, onde
+ * bot de raspagem acha em segundos. O link do WhatsApp saiu junto — wa.me
+ * carrega o número no próprio endereço, então mantê-lo não resolveria nada.
+ */
 export default function Contact() {
-  const whatsapp = `https://wa.me/55${identity.phone.replace(/\D/g, "")}`;
-
   return (
     <section
       id="contato"
@@ -44,9 +49,8 @@ export default function Contact() {
         <Reveal
           variant="stagger"
           delay={0.35}
-          className="mt-14 grid gap-px bg-line sm:grid-cols-2 lg:grid-cols-4"
+          className="mt-14 grid gap-px bg-line sm:grid-cols-3"
         >
-          <ContactItem label="TELEFONE" value={identity.phone} href={whatsapp} />
           <ContactItem
             label="LINKEDIN"
             value="/in/eduardo-graim"

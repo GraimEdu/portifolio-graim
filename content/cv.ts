@@ -15,7 +15,6 @@ export type Identity = {
   location: string;
   city: string;
   email: string;
-  phone: string;
   linkedin: string;
   linkedinUrl: string;
   github: string;
@@ -33,7 +32,6 @@ export const identity: Identity = {
   location: "Jurunas — Belém/PA",
   city: "Belém, Pará",
   email: "egraim18@gmail.com",
-  phone: "(91) 98559-5012",
   linkedin: "linkedin.com/in/eduardo-graim",
   linkedinUrl: "https://www.linkedin.com/in/eduardo-graim",
   github: "github.com/GraimEdu",
